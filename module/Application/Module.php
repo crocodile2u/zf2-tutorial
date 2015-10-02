@@ -2,7 +2,12 @@
 
 namespace Application;
 
+use Application\View\BlitzRenderer;
+use Application\View\RenderingStrategy;
 use Zend\Mvc\ModuleRouteListener;
+use Zend\ServiceManager\ServiceManager;
+use Zend\View\Renderer\JsonRenderer;
+use Zend\View\Resolver\TemplatePathStack;
 
 class Module
 {

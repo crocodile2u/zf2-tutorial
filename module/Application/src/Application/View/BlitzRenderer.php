@@ -290,6 +290,7 @@ class BlitzRenderer implements Renderer, TreeRendererInterface
         }
 
         $template = $this->resolver($nameOrModel);
+//        die('$template: '.$template);
         $blitz = new \Blitz($template);
         return $blitz->parse($this->__vars);
     }
