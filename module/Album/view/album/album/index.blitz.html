@@ -1,0 +1,22 @@
+<h1>Albums</h1>
+<p>
+    <a href="/album/add">Add new album</a>
+</p>
+
+<table class="table">
+    <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>&nbsp;</th>
+    </tr>
+    <!-- BEGIN album -->
+    <tr>
+        <td>{{title}}</td>
+        <td>{{artist}}</td>
+        <td>
+            <a href="/albums/edit/{{id}}">Edit</a>
+            <a href="/albums/delete/{{id}}">Delete</a>
+        </td>
+    </tr>
+    <!-- END album -->
+</table>

@@ -12,6 +12,11 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $eventManager->attach('render', function($e) {
+            /** @var \Zend\Mvc\MvcEvent $e */
+            return $this->registerRenderingStrategy($e);
+        }, 100);
     }
 
     public function getConfig()
@@ -28,6 +33,41 @@ class Module
                 ),
             ),
         );
+    }
+
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                RenderingStrategy::class => function ($sm) {
+                    /** @var ServiceManager $sm */
+                    return new RenderingStrategy($sm);
+                },
+                BlitzRenderer::class => function($sm) {
+                    /** @var ServiceManager $sm */
+                    $ret = new BlitzRenderer();
+                    $ret->setResolver($sm->get(TemplatePathStack::class));
+                    return $ret;
+                },
+                JsonRenderer::class => function($sm) {
+                    return new JsonRenderer();
+                }
+            ),
+        );
+    }
+
+    /**
+     * @param  \Zend\Mvc\MvcEvent $e The MvcEvent instance
+     * @return void
+     */
+    private function registerRenderingStrategy($e) {
+        $app          = $e->getTarget();
+        $locator      = $app->getServiceManager();
+        $view         = $locator->get(\Zend\View\View::class);
+        $renderingStrategy = $locator->get(RenderingStrategy::class);
+
+        // Attach strategy, which is a listener aggregate, at high priority
+        $view->getEventManager()->attach($renderingStrategy, 100);
     }
 
 }

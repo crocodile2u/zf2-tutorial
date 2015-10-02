@@ -93,4 +93,9 @@ class Album implements InputFilterAwareInterface
 
         return $this->inputFilter;
     }
+
+    public function toArray()
+    {
+        return $this->getArrayCopy();
+    }
 }
